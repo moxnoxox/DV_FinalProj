@@ -1,18 +1,29 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>D3 Responsive Circles</title>
+  <title>Superstition Index Radar</title>
   <style>
-    html, body { margin:0; padding:0; }
-    /* svg는 JS에서 크기를 지정하므로 꼭 width/height 속성이 없어도 표시됩니다 */
-    #chart { display: block; }
+    @font-face {
+      font-family: 'Pretendard';
+      src: url('./fonts/Pretendard-Regular.otf') format('otf');
+      font-weight: 400;
+      font-style: regular;
+    }
+    html, body { margin:0; padding:0; width:100%; height:100%; }
+    #chart { display:block; width:100%; height:100%; }
+    #controls { background:#fafafa; }
+    #tooltip { pointer-events: none; }
   </style>
 </head>
 <body>
+  <!-- 연도 선택 드롭다운이 이곳에 삽입됩니다 -->
   <svg id="chart"></svg>
 
+  <!-- D3.js v7 -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
-  <script src="./sketch.js"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+  <!-- 메인 스크립트 -->
+  <script src="sketch.js"></script>
 </body>
 </html>

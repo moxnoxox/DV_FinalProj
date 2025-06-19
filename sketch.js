@@ -45,21 +45,21 @@ const ringColors = {
 };
 
 const flagColors = {
-  Korea:   '#003478',
-  Japan:   '#BC002D',
-  US:      '#B22234',
-  Canada:  '#FF0000',
-  Finland: '#003580',
-  Norway:  '#BA0C2F',
-  Sweden:  '#006AA7',
-  UK:      '#00247D',
-  France:  '#0055A4',
-  Spain:   '#C60B1E',
-  Czech:   '#D7141A',
-  Hungary: '#C8102E',
-  Mexico:  '#006847',
-  Chile:   '#D52B1E',
-  Australia:'#00008B'
+  Korea:     'red',        // 빨강
+  Japan:     'orange',     // 주황
+  US:        'yellow',     // 노랑
+  Canada:    'green',      // 초록
+  Finland:   'blue',       // 파랑
+  Norway:    'navy',       // 남색
+  Sweden:    'purple',     // 보라
+  UK:        'brown',      // 갈색
+  France:    'lightgreen', // 연두색
+  Spain:     'pink',       // 분홍색
+  Czech:     'skyblue',    // 하늘색
+  Hungary:   '#5CFFD1',  // 민트색
+  Mexico:    'magenta',    // 자주색
+  Chile:     'gray',       // 회색
+  Australia: '#FBCEB1'     // 살구색
 };
 
 // Load Excel data for a country
@@ -137,11 +137,16 @@ function draw() {
   const polys = svg.selectAll('.country-poly').data(layoutData, d=>d.country);
   polys.join(
     enter => enter.append('path').attr('class','country-poly')
-      .style('fill', d => flagColors[d.country]).style('fill-opacity',.3)
-      
+      .style('fill', d => flagColors[d.country]).style('fill-opacity',1.0)
+      // Outline stroke is the complementary color of the fill
+      .style('stroke','none')
+      .style('stroke-width', 1)
       .style('cursor','pointer')
       .on('mouseover',function(e,d){
-        d3.select(this).style('stroke','darkblue');
+        // On hover, make stroke slightly thicker but keep the complement color
+        const base = d3.color(flagColors[d.country]);
+        const comp = d3.rgb(255 - base.r, 255 - base.g, 255 - base.b);
+        d3.select(this).style('stroke', comp).style('stroke-width', 2);
         const R = svg.node().getBoundingClientRect();
         tooltip.html(`Index(2022): ${d.value}`)
                .style('left',`${R.left+d.x+50}px`).style('top',`${R.top+d.y-10}px`).style('display','block');
@@ -181,7 +186,11 @@ function draw() {
         .attr('x1',d.x).attr('y1',d.y)
         .attr('x2',d.x + r*Math.cos(ang))
         .attr('y2',d.y + r*Math.sin(ang))
-        .attr('stroke', ringColors[continentMap[d.country]]);
+        .attr('stroke', () => {
+          if (d.country === 'Chile') return 'black';
+          const c = d3.color(flagColors[d.country]);
+          return d3.rgb(255 - c.r, 255 - c.g, 255 - c.b);
+        });
     });
   });
   // 각 꼭짓점에 해당 연도 표시
